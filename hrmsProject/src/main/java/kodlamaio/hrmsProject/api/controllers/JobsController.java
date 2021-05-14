@@ -11,12 +11,14 @@ import kodlamaio.hrmsProject.business.abstracts.JobService;
 import kodlamaio.hrmsProject.entities.concretes.Job;
 
 
+
 @RestController
 @RequestMapping("/api/jobs")
 public class JobsController {
 	
 	@Autowired
 	private JobService jobService;
+	
 	public JobsController(JobService jobService) {
 		super();
 		this.jobService = jobService;
