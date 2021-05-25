@@ -7,6 +7,11 @@ import org.springframework.stereotype.Service;
 
 import kodlamaio.hrmsProject.adapter.personValidator.CheckPersonService;
 import kodlamaio.hrmsProject.business.abstracts.JobHunterService;
+import kodlamaio.hrmsProject.core.utilities.results.DataResult;
+import kodlamaio.hrmsProject.core.utilities.results.ErrorResult;
+import kodlamaio.hrmsProject.core.utilities.results.Result;
+import kodlamaio.hrmsProject.core.utilities.results.SuccessDataResult;
+import kodlamaio.hrmsProject.core.utilities.results.SuccessResult;
 import kodlamaio.hrmsProject.dataAccess.abstracts.JobHunterDao;
 import kodlamaio.hrmsProject.entities.concretes.JobHunter;
 
@@ -32,27 +37,48 @@ public class JobHunterManager implements JobHunterService {
 
 
 	@Override
-	public List<JobHunter> getall() {
+	public DataResult<List<JobHunter>> getall() {
 		
-		return this.jobHunterDao.findAll();
+		return new SuccessDataResult<List<JobHunter>>(this.jobHunterDao.findAll(),"İşarayanlar  listeledi.");
 	}
 
 
 	@Override
-	public void add(JobHunter jobHunter) {
+	public Result add(JobHunter jobHunter) {
 		
 	   if(checkPersonService.checkPerson(jobHunter)) {
 		   this.jobHunterDao.save(jobHunter);
 		   System.out.println("Job hunter eklendi :"+jobHunter.getFirstName()+"  "+jobHunter.getLastName());
+		   return new SuccessResult();
 		   
 	   }
-	   else {
-			System.out.println("Üye Bilgileri Hatali");
-		}	
+	   
+	return new ErrorResult("Üye bilgileri Hatalı."); 
+			
 		
 		
 		
 	}
+
+
+	@Override
+	public Result delete(JobHunter jobHunter) {
+		
+		this.jobHunterDao.delete(jobHunter);
+		return new SuccessResult("İş arayan silindi.");
+	}
+
+
+	@Override
+	public Result update(JobHunter jobHunter) {
+		this.jobHunterDao.save(jobHunter);
+		return new SuccessResult("İş arayan güncellendi.");
+		
+	}
+
+
+	
+	
 	
 
 }
